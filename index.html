@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Viaje</title>
+	<link rel="icon" href="./bus.png" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 160vh;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 550px;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Registro de Viaje</h2>
+	<br>
+    <form id="registroForm">
+        <label for="ruta">Ruta:</label>
+        <input type="text" id="ruta" name="ruta" required>
+
+        <label for="unidad">Unidad:</label>
+        <input type="text" id="unidad" name="unidad" required>
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required>
+
+        <label for="inicio">Inicio:</label>
+        <input type="time" id="inicio" name="inicio" required>
+
+        <label for="final">Final:</label>
+        <input type="time" id="final" name="final" required>
+
+        <label for="num_pasajeros">Número de Pasajeros:</label>
+        <input type="number" id="num_pasajeros" name="num_pasajeros" min="0" required>
+
+        <label for="veces_limite">Veces que se superó el límite de velocidad:</label>
+        <input type="number" id="veces_limite" name="veces_limite" min="0" required>
+
+        <label for="descripcion_velocidad">Descripción de velocidad máxima:</label>
+        <textarea id="descripcion_velocidad" name="descripcion_velocidad" rows="3" required></textarea>
+
+        <label for="lista_pasajeros">Lista de pasajeros que subieron:</label>
+        <textarea id="lista_pasajeros" name="lista_pasajeros" rows="5" placeholder="Ingresa los ID de los pasajeros" required></textarea>
+
+        <button type="button" onclick="generatePDF()">Generar PDF</button>
+    </form>
+</div>
+
+<script>
+    function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Recopilamos los datos del formulario
+        const ruta = document.getElementById('ruta').value;
+        const unidad = document.getElementById('unidad').value;
+        let fecha = document.getElementById('fecha').value;
+
+        // Formateamos la fecha reemplazando "/" por "-"
+        fecha = fecha.replace(/\//g, "-");
+
+        const inicio = document.getElementById('inicio').value;
+        const final = document.getElementById('final').value;
+        const numPasajeros = document.getElementById('num_pasajeros').value;
+        const vecesLimite = parseInt(document.getElementById('veces_limite').value);
+        const descripcionVelocidad = document.getElementById('descripcion_velocidad').value;
+        const listaPasajeros = document.getElementById('lista_pasajeros').value;
+
+        // Determinamos el nivel de conducción basado en las veces que se superó el límite de velocidad
+        let nivelConduccion;
+        if (vecesLimite === 0) {
+            nivelConduccion = "Excelente";
+        } else if (vecesLimite === 1) {
+            nivelConduccion = "Muy bueno";
+        } else if (vecesLimite === 2) {
+            nivelConduccion = "Bueno";
+        } else if (vecesLimite === 3) {
+            nivelConduccion = "Regular";
+        } else {
+            nivelConduccion = "Deficiente";
+        }
+
+        // Configuramos el título del PDF dinámicamente
+        const tituloPDF = `Fecha: ${fecha} | Unidad: ${unidad} | Ruta: ${ruta}`;
+        doc.setFontSize(16);
+        doc.text(tituloPDF, 20, 20);
+
+        // Definimos el contenido de la tabla
+        const tableData = [
+            ["Ruta", ruta],
+            ["Unidad", unidad],
+            ["Fecha", fecha],
+            ["Inicio", inicio],
+            ["Final", final],
+            ["Número de Pasajeros", numPasajeros],
+            ["Veces que se superó el límite de velocidad", vecesLimite],
+            ["Descripción de Velocidad Máxima", descripcionVelocidad],
+            ["Lista de Pasajeros", listaPasajeros],
+            ["Nivel de Conducción", nivelConduccion]
+        ];
+
+        // Generamos la tabla en el PDF usando autoTable
+        doc.autoTable({
+            head: [["Campo", "Valor"]],
+            body: tableData,
+            startY: 30,
+            theme: 'striped',
+            styles: {
+                cellPadding: 3,
+                fontSize: 10,
+                valign: 'middle',
+                overflow: 'linebreak'
+            },
+            headStyles: {
+                fillColor: [22, 160, 133],
+                textColor: [255, 255, 255]
+            }
+        });
+
+        // Configuramos el nombre del archivo usando Fecha, Ruta y Unidad
+        const fileName = `${fecha}-${ruta}-${unidad}.pdf`;
+
+        // Guardamos el PDF con el nombre dinámico
+        doc.save(fileName);
+    }
+</script>
+
+</body>
+</html>
+
