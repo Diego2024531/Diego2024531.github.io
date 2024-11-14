@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Viaje</title>
-	<link rel="icon" href="./bus.png" type="image/x-icon">
+    <link rel="icon" href="./bus.png" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
     <style>
@@ -61,7 +62,7 @@
 
 <div class="container">
     <h2>Registro de Viaje</h2>
-	<br>
+    <br>
     <form id="registroForm">
         <label for="ruta">Ruta:</label>
         <input type="text" id="ruta" name="ruta" required>
@@ -85,7 +86,7 @@
         <input type="number" id="veces_limite" name="veces_limite" min="0" required>
 
         <label for="descripcion_velocidad">Descripción de velocidad máxima:</label>
-        <textarea id="descripcion_velocidad" name="descripcion_velocidad" rows="3" required></textarea>
+        <textarea id="descripcion_velocidad" name="descripcion_velocidad" rows="3"></textarea>
 
         <label for="lista_pasajeros">Lista de pasajeros que subieron:</label>
         <textarea id="lista_pasajeros" name="lista_pasajeros" rows="5" placeholder="Ingresa los ID de los pasajeros" required></textarea>
@@ -96,6 +97,13 @@
 
 <script>
     function generatePDF() {
+        // Verificar que todos los campos requeridos estén completos
+        const form = document.getElementById('registroForm');
+        if (!form.checkValidity()) {
+            alert('Por favor, complete todos los campos obligatorios.');
+            return;
+        }
+
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
