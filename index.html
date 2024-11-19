@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -173,8 +172,8 @@
             }
         });
 
-        // Configuramos el nombre del archivo usando Fecha, Ruta y Unidad
-        const fileName = `${fecha}-${ruta}-${unidad}.pdf`;
+        // Configuramos el nombre del archivo usando Fecha, Ruta, Unidad, Inicio y Final
+        const fileName = `${fecha}-${ruta}-${unidad}-${inicio}-${final}.pdf`;
 
         // Guardamos el PDF con el nombre dinámico
         doc.save(fileName);
