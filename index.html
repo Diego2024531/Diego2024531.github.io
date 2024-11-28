@@ -34,7 +34,7 @@
             margin-top: 10px;
             display: block;
         }
-        input, textarea {
+        input, select, textarea {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
@@ -64,7 +64,36 @@
     <br>
     <form id="registroForm">
         <label for="ruta">Ruta:</label>
-        <input type="text" id="ruta" name="ruta" required>
+        <select id="ruta" name="ruta" required onchange="actualizarUnidad()">
+            <option value="">Seleccione una ruta</option>
+            <option value="CUAXINCA">CUAXINCA</option>
+            <option value="5/A y 6/A APOYO">5/A y 6/A APOYO</option>
+            <option value="5TA/6TA">5TA/6TA</option>
+			<option value="ACUAMANALA">ACUAMANALA</option>
+			<option value="AGUA SANTA">AGUA SANTA</option>
+			<option value="AMALUCAN 1">AMALUCAN 1</option>
+			<option value="ATLAMAXAC">ATLAMAXAC</option>
+			<option value="CALINDA">CALINDA</option>
+			<option value="CONTLA APOYO">CONTLA APOYO</option>
+			<option value="CONTLA">CONTLA</option>
+			<option value="EL CARMEN APOYO">EL CARMEN APOYO</option>
+			<option value="El CARMEN">El CARMEN</option>
+			<option value="OCOTLAN APOYO">OCOTLAN APOYO</option>
+			<option value="OCOTLAN">OCOTLAN</option>
+			<option value="SAN FELIPE 1">SAN FELIPE 1</option>
+			<option value="SAN FELIPE 2">SAN FELIPE 2</option>
+			<option value="SAN FRANCISCO 1">SAN FRANCISCO 1</option>
+			<option value="SAN FRANCISCO 2">SAN FRANCISCO 2</option>
+			<option value="SAN MARCOS">SAN MARCOS</option>
+			<option value="SANTO TORIBIO">SANTO TORIBIO</option>
+			<option value="SN MARCOS">SN MARCOS</option>
+			<option value="TEPEYANCO APOYO">TEPEYANCO APOYO</option>
+			<option value="TEPEYANCO">TEPEYANCO</option>
+			<option value="TLAXCALA MIXTO">TLAXCALA MIXTO</option>
+			<option value="SAN MARTIN">SAN MARTIN</option>
+			<option value="UNIDAD VW">UNIDAD VW</option>
+			<option value="LA PALMA">LA PALMA</option>
+        </select>
 
         <label for="unidad">Unidad:</label>
         <input type="text" id="unidad" name="unidad" required>
@@ -78,8 +107,9 @@
         <label for="final">Final:</label>
         <input type="time" id="final" name="final" required>
 
-        <label for="num_pasajeros">Número de Pasajeros:</label>
-        <input type="number" id="num_pasajeros" name="num_pasajeros" min="0" required>
+		<label for="num_pasajeros">Número de Pasajeros:</label>
+		<input type="number" id="num_pasajeros" name="num_pasajeros" min="0" readonly required>
+
 
         <label for="veces_limite">Veces que se superó el límite de velocidad:</label>
         <input type="number" id="veces_limite" name="veces_limite" min="0" required>
@@ -88,15 +118,95 @@
         <textarea id="descripcion_velocidad" name="descripcion_velocidad" rows="3"></textarea>
 
         <label for="lista_pasajeros">Lista de pasajeros que subieron:</label>
-        <textarea id="lista_pasajeros" name="lista_pasajeros" rows="5" placeholder="Ingresa los ID de los pasajeros" required></textarea>
+		<textarea id="lista_pasajeros" name="lista_pasajeros" rows="5" placeholder="Ingresa los ID de los pasajeros" required oninput="actualizarNumPasajeros()"></textarea>
+
+		<button type="button" onclick="limpiarLista()" class="secondary-button">Limpiar</button>
+		
+		<br><br>
 
         <button type="button" onclick="generatePDF()">Generar PDF</button>
     </form>
 </div>
 
 <script>
+    function actualizarUnidad() {
+        const ruta = document.getElementById('ruta').value;
+        const unidad = document.getElementById('unidad');
+
+        if (ruta === "CUAXINCA") {
+            unidad.value = "2MUB81";
+        } else if (ruta === "5/A y 6/A APOYO") {
+            unidad.value = "2MUJ84";
+        } else if (ruta === "5TA/6TA") {
+            unidad.value = "04WYA85";
+		} else if (ruta === "ACUAMANALA") {
+        unidad.value = "2MUM11";
+        } else if (ruta === "AGUA SANTA") {
+            unidad.value = "30RD7Y";
+        } else if (ruta === "AMALUCAN 1") {
+            unidad.value = "31RD7Y";
+        } else if (ruta === "ATLAMAXAC") {
+            unidad.value = "2MUB80";
+        } else if (ruta === "CALINDA") {
+            unidad.value = "2MUN48";
+        } else if (ruta === "CONTLA APOYO") {
+            unidad.value = "2MUL83";
+        } else if (ruta === "CONTLA") {
+            unidad.value = "2MUL90";
+        } else if (ruta === "EL CARMEN APOYO") {
+            unidad.value = "2MUJ90";
+        } else if (ruta === "El CARMEN") {
+            unidad.value = "2MUL76";
+        } else if (ruta === "OCOTLAN APOYO") {
+            unidad.value = "2MUB23";
+        } else if (ruta === "OCOTLAN") {
+            unidad.value = "800RP3";
+        } else if (ruta === "SAN FELIPE 1") {
+            unidad.value = "02WY94";
+        } else if (ruta === "SAN FELIPE 2") {
+            unidad.value = "2MUM26";
+        } else if (ruta === "SAN FRANCISCO 1") {
+            unidad.value = "2MUP21";
+        } else if (ruta === "SAN FRANCISCO 2") {
+            unidad.value = "2MUM14";
+        } else if (ruta === "SAN MARCOS") {
+            unidad.value = "2MUL68";
+        } else if (ruta === "SANTO TORIBIO") {
+            unidad.value = "XB80668";
+        } else if (ruta === "SN MARCOS") {
+            unidad.value = "35RA4P";
+        } else if (ruta === "TEPEYANCO APOYO") {
+            unidad.value = "2MUN79";
+        } else if (ruta === "TEPEYANCO") {
+            unidad.value = "2MUM66";
+        } else if (ruta === "TLAXCALA MIXTO") {
+            unidad.value = "2MUM29";
+        } else if (ruta === "SAN MARTIN") {
+            unidad.value = "TSS606A";
+        } else if (ruta === "UNIDAD VW") {
+            unidad.value = "UGG268A";
+        } else if (ruta === "LA PALMA") {
+            unidad.value = "2MUM13";
+        } else if (ruta === "") {
+            unidad.value = "";
+        }
+    }
+	
+	function actualizarNumPasajeros() {
+        const listaPasajeros = document.getElementById('lista_pasajeros').value;
+        const numPasajerosField = document.getElementById('num_pasajeros');
+        
+        // Contar saltos de línea y determinar el número de pasajeros
+        const numPasajeros = listaPasajeros.split('\n').filter(line => line.trim() !== "").length;
+        numPasajerosField.value = numPasajeros;
+    }
+	
+	function limpiarLista() {
+        document.getElementById('lista_pasajeros').value = "";
+        document.getElementById('num_pasajeros').value = 0;
+    }
+
     function generatePDF() {
-        // Verificar que todos los campos requeridos estén completos
         const form = document.getElementById('registroForm');
         if (!form.checkValidity()) {
             alert('Por favor, complete todos los campos obligatorios.');
@@ -106,14 +216,11 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        // Recopilamos los datos del formulario
         const ruta = document.getElementById('ruta').value;
         const unidad = document.getElementById('unidad').value;
         let fecha = document.getElementById('fecha').value;
 
-        // Formateamos la fecha reemplazando "/" por "-"
         fecha = fecha.replace(/\//g, "-");
-
         const inicio = document.getElementById('inicio').value;
         const final = document.getElementById('final').value;
         const numPasajeros = document.getElementById('num_pasajeros').value;
@@ -121,7 +228,6 @@
         const descripcionVelocidad = document.getElementById('descripcion_velocidad').value;
         const listaPasajeros = document.getElementById('lista_pasajeros').value;
 
-        // Determinamos el nivel de conducción basado en las veces que se superó el límite de velocidad
         let nivelConduccion;
         if (vecesLimite === 0) {
             nivelConduccion = "Excelente";
@@ -135,12 +241,10 @@
             nivelConduccion = "Deficiente";
         }
 
-        // Configuramos el título del PDF dinámicamente
         const tituloPDF = `Fecha: ${fecha} | Unidad: ${unidad} | Ruta: ${ruta}`;
         doc.setFontSize(16);
         doc.text(tituloPDF, 20, 20);
 
-        // Definimos el contenido de la tabla
         const tableData = [
             ["Ruta", ruta],
             ["Unidad", unidad],
@@ -154,7 +258,6 @@
             ["Nivel de Conducción", nivelConduccion]
         ];
 
-        // Generamos la tabla en el PDF usando autoTable
         doc.autoTable({
             head: [["Campo", "Valor"]],
             body: tableData,
@@ -172,14 +275,10 @@
             }
         });
 
-        // Configuramos el nombre del archivo usando Fecha, Ruta, Unidad, Inicio y Final
         const fileName = `${fecha}-${ruta}-${unidad}-${inicio}-${final}.pdf`;
-
-        // Guardamos el PDF con el nombre dinámico
         doc.save(fileName);
     }
 </script>
 
 </body>
 </html>
-
